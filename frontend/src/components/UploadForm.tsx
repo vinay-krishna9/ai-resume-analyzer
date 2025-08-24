@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { uploadFile } from "../api";
 
 interface UploadFormProps {
   setResults: React.Dispatch<React.SetStateAction<any>>;
@@ -26,31 +27,23 @@ const UploadForm: React.FC<UploadFormProps> = ({ setResults }) => {
     setIsDragging(false);
   }, []);
 
-  const handleUpload = () => {
-    // if (!file) return;
+  const handleUpload = async () => {
+    if (!file) return;
 
-    // Mock results for wireframe
-    const mockResults = {
-      role: "Frontend Engineer",
-      skillsFound: ["React", "JavaScript", "HTML", "CSS"],
-      missingSkills: ["TypeScript", "Next.js"],
-      score: 70,
-      suggestions: [
-        "Add Next.js experience to highlight modern frontend skills",
-        "Mention TypeScript explicitly if you have experience",
-      ],
-    };
-    setResults(mockResults);
+    const result = await uploadFile(file);
+    setResults(result);
   };
 
   return (
     <div style={{ marginBottom: "2rem" }}>
       <div
         style={{
-          border: "2px dashed #eee",
+          border: "2px dashed #aaa",
+          borderColor: isDragging ? "#007bff" : "#aaa",
           padding: "2rem",
           textAlign: "center",
-          backgroundColor: isDragging ? "#eee" : "transparent",
+          backgroundColor: isDragging ? "#f0f8ff" : "transparent",
+          transition: "all 0.2s ease",
         }}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
@@ -62,11 +55,13 @@ const UploadForm: React.FC<UploadFormProps> = ({ setResults }) => {
           <p>Drag & drop your resume here, or click to select a file</p>
         )}
         <input
+          id="fileUpload"
           type="file"
           accept=".pdf"
           onChange={(e) => e.target.files && setFile(e.target.files[0])}
           style={{ display: "none" }}
-        />{" "}
+        />
+
         <label
           htmlFor="fileUpload"
           style={{
@@ -74,16 +69,8 @@ const UploadForm: React.FC<UploadFormProps> = ({ setResults }) => {
             cursor: "pointer",
             marginTop: "1rem",
           }}
-          onClick={() =>
-            (
-              document.querySelector(
-                'input[type="file"]'
-              ) as HTMLInputElement | null
-            )?.click()
-          }
         >
-          {" "}
-          Browse Files{" "}
+          Browse Files
         </label>
       </div>
       <button
