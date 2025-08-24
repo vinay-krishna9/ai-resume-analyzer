@@ -9,7 +9,7 @@ const Results: React.FC<ResultsProps> = ({ results }) => {
     <div
       style={{ border: "1px solid #ccc", padding: "1rem", borderRadius: "8px" }}
     >
-      <h2>Results for {results.role}</h2>
+      {/* <h2>Results for {results.role}</h2>
       <p>Score: {results.score}%</p>
 
       <div>
@@ -37,7 +37,8 @@ const Results: React.FC<ResultsProps> = ({ results }) => {
             <li key={i}>- {s}</li>
           ))}
         </ul>
-      </div>
+      </div> */}
+      <div>{JSON.stringify(results, null, 2)}</div>
     </div>
   );
 };
